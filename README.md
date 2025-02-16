@@ -1,18 +1,6 @@
-# pg_my_database
+# most - mvp
 
-Template of a C++ service that uses [userver framework](https://github.com/userver-framework/userver) with PostgreSQL.
-
-
-## Download and Build
-
-To create your own userver-based service follow the following steps:
-
-1. Press the "Use this template button" at the top right of this GitHub page
-2. Clone the service `git clone your-service-repo && cd your-service-repo`
-3. Give a proper name to your service and replace all the occurrences of "my_database" string with that name
-   (could be done via `find . -not -path "./third_party/*" -not -path ".git/*" -not -path './build-*' -type f | xargs sed -i 's/my_database/YOUR_SERVICE_NAME/g'`).
-4. Feel free to tweak, adjust or fully rewrite the source code of your service.
-
+MVP most. Бекенд-сервис тестирующей системы. В данный момент реализована поддержка python.
 
 ## Makefile
 
@@ -29,10 +17,3 @@ can also be `debug-custom`, `release-custom`.
 * `make dist-clean` - clean build files and cmake cache
 * `make docker-COMMAND` - run `make COMMAND` in docker environment
 * `make docker-clean-data` - stop docker containers and clean database data
-
-
-## License
-
-The original template is distributed under the [Apache-2.0 License](https://github.com/userver-framework/userver/blob/develop/LICENSE)
-and [CLA](https://github.com/userver-framework/userver/blob/develop/CONTRIBUTING.md). Services based on the template may change
-the license and CLA.
