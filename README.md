@@ -1,19 +1,27 @@
 # most - mvp
 
-MVP most. Бекенд-сервис тестирующей системы. В данный момент реализована поддержка python.
+**most-test sys.** — это архив задач с встроенной тестирующей системой, предназначенной для проверки решений пользователей. Здесь же представлен MVP проекта, который представляет из себя API тестирующей системы и сервиса.
+
+## Технологии и языки
+
+1) `C++`, `python`
+2) `Userver`
+3) `Postgresql`
+4) `CMake`
+
+## Возможности MVP
+
+1) Представляет из себя сервис с ручками API без веб-интерфейса
+2) Хранение задач и решений (без привязки к участникам) в базе данных
+3) Проверка задач и выдача вердикта для языка Python
 
 ## Makefile
 
-`PRESET` is either `debug`, `release`, or if you've added custom presets in `CMakeUserPresets.json`, it
-can also be `debug-custom`, `release-custom`.
+Запуск и развертываение MVP происходит через make
 
-* `make cmake-PRESET` - run cmake configure, update cmake options and source file lists
-* `make build-PRESET` - build the service
-* `make test-PRESET` - build the service and run all tests
-* `make start-PRESET` - build the service, start it in testsuite environment and leave it running
-* `make install-PRESET` - build the service and install it in directory set in environment `PREFIX`
-* `make` or `make all` - build and run all tests in `debug` and `release` modes
-* `make format` - reformat all C++ and Python sources
-* `make dist-clean` - clean build files and cmake cache
-* `make docker-COMMAND` - run `make COMMAND` in docker environment
-* `make docker-clean-data` - stop docker containers and clean database data
+`PRESET` - это `debug`, `release`
+
+* `make cmake-PRESET` - запуск настройки cmake, обновление параметров cmake и списков исходных файлов
+* `make build-PRESET` - построить сервис
+* `make test-PRESET` - построить сервис и запустить все тесты
+* `make dist-clean` - почистить кэш и удалить созданные файлы
