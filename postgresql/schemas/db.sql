@@ -1,21 +1,16 @@
-DROP SCHEMA IF EXISTS hello_schema CASCADE;
+DROP SCHEMA IF EXISTS most_db CASCADE;
 
-CREATE SCHEMA IF NOT EXISTS hello_schema;
+CREATE SCHEMA IF NOT EXISTS most_db;
 
-CREATE TABLE IF NOT EXISTS hello_schema.users (
-    name TEXT PRIMARY KEY,
-    count INTEGER DEFAULT(1)
-);
-
-CREATE TABLE IF NOT EXISTS hello_schema.tasks (
+CREATE TABLE IF NOT EXISTS most_db.tasks (
     id SERIAL PRIMARY KEY,
     name TEXT,
     tests TEXT
 );
 
-CREATE TABLE IF NOT EXISTS hello_schema.solutions (
+CREATE TABLE IF NOT EXISTS most_db.solutions (
     id SERIAL PRIMARY KEY,
-    task_id INTEGER REFERENCES hello_schema.tasks(id) ON DELETE CASCADE,
+    task_id INTEGER REFERENCES most_db.tasks(id) ON DELETE CASCADE,
     language TEXT,
     code TEXT,
     verdict TEXT

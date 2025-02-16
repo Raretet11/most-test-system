@@ -38,7 +38,7 @@ public:
         // TODO: validate
         auto result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "INSERT INTO hello_schema.tasks(name, tests) VALUES($1, $2)",
+            "INSERT INTO most_db.tasks(name, tests) VALUES($1, $2)",
             task_name, tests
         );
 

@@ -40,7 +40,7 @@ public:
         
         auto result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "SELECT tests FROM hello_schema.tasks WHERE id = ($1);",
+            "SELECT tests FROM most_db.tasks WHERE id = ($1);",
             task_id
         );
 
@@ -55,7 +55,7 @@ public:
 
         result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "INSERT INTO hello_schema.solutions(task_id, language, code, verdict) VALUES($1, $2, $3, $4)",
+            "INSERT INTO most_db.solutions(task_id, language, code, verdict) VALUES($1, $2, $3, $4)",
             task_id, "python", solution, res
         );
 
