@@ -50,11 +50,6 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
-        handler-hello:
-            path: /v1/hello
-            method: POST
-            task_processor: main-task-processor
-
         handler-user-submit-solution:
             path: /v1/submit
             method: POST
