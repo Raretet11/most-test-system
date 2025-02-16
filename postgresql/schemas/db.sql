@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS hello_schema.tasks (
 CREATE TABLE IF NOT EXISTS hello_schema.solutions (
     id SERIAL PRIMARY KEY,
     task_id INTEGER REFERENCES hello_schema.tasks(id) ON DELETE CASCADE,
+    language TEXT,
     code TEXT,
     verdict TEXT
 );
