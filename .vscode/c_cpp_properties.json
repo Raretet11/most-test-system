@@ -1,10 +1,17 @@
 {
-  "configurations": [
-    {
-      "name": "CMake",
-      "compileCommands": "${config:cmake.buildDirectory}/compile_commands.json",
-      "configurationProvider": "ms-vscode.cmake-tools"
-    }
-  ],
-  "version": 4
+    "configurations": [
+        {
+            "name": "CMake",
+            "compileCommands": [
+                "${config:cmake.buildDirectory}/compile_commands.json"
+            ],
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "cppStandard": "c++17",
+            "includePath": [
+                "${default}",
+                "${workspaceFolder}/build-debug/_deps/userver-src/core/include"
+            ]
+        }
+    ],
+    "version": 4
 }

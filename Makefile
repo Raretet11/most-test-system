@@ -1,4 +1,4 @@
-PROJECT_NAME = service_template
+PROJECT_NAME = my_database
 NPROCS ?= $(shell nproc)
 CLANG_FORMAT ?= clang-format
 DOCKER_IMAGE ?= ghcr.io/userver-framework/ubuntu-24.04-userver:latest

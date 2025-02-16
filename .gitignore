@@ -15,3 +15,7 @@ Testing/
 .DS_Store
 Makefile.local
 CMakeUserPresets.json
+Makefile
+test.sh
+.devcontainer/devcontainer.json
+cmake
