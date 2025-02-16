@@ -12,8 +12,8 @@
 
 //         for (auto _ : state) {
 //             const auto name = kNames[i++ % std::size(kNames)];
-//             auto result = my_database::SayHelloTo(
-//                 name, my_database::UserType::kFirstTime
+//             auto result = most::SayHelloTo(
+//                 name, most::UserType::kFirstTime
 //             );
 //             benchmark::DoNotOptimize(result);
 //         }

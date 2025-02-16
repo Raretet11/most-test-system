@@ -7,7 +7,7 @@
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
 
-namespace my_database {
+namespace most {
 
 namespace {
 
@@ -48,7 +48,7 @@ public:
             }
         }
 
-        return my_database::SayHelloTo(name, user_type);
+        return most::SayHelloTo(name, user_type);
     }
 
     userver::storages::postgres::ClusterPtr pg_cluster_;
@@ -77,4 +77,4 @@ void AppendHello(userver::components::ComponentList &component_list) {
     component_list.Append<userver::clients::dns::Component>();
 }
 
-}  // namespace my_database
+}  // namespace most

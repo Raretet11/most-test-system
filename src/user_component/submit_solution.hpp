@@ -5,8 +5,8 @@
 #include <userver/components/component_list.hpp>
 #include "../checker/AbstractChecker.hpp"
 
-namespace my_database {
+namespace most {
 
 void append_task_submiter_component(userver::components::ComponentList &component_list);
 
-}  // namespace my_database
+}  // namespace most

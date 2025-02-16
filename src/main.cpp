@@ -16,9 +16,9 @@ int main(int argc, char *argv[]) {
             .Append<userver::components::HttpClient>()
             .Append<userver::server::handlers::TestsControl>();
 
-    my_database::append_task_loader_component(component_list);
-    my_database::AppendHello(component_list);
-    my_database::append_task_submiter_component(component_list);
+    most::append_task_loader_component(component_list);
+    most::AppendHello(component_list);
+    most::append_task_submiter_component(component_list);
 
     return userver::utils::DaemonMain(argc, argv, component_list);
 }

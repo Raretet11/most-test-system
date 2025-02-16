@@ -2,8 +2,8 @@
 // #include <userver/utest/utest.hpp>
 
 // UTEST(SayHelloTo, Basic) {
-//     using my_database::SayHelloTo;
-//     using my_database::UserType;
+//     using most::SayHelloTo;
+//     using most::UserType;
 
 //     EXPECT_EQ(
 //         SayHelloTo("Developer", UserType::kFirstTime), "Hello, Developer!\n"

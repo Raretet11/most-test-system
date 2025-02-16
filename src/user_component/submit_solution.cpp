@@ -10,7 +10,7 @@
 #include <userver/utils/assert.hpp>
 #include <string>
 
-namespace my_database {
+namespace most {
 
 namespace {
 
@@ -71,4 +71,4 @@ void append_task_submiter_component(userver::components::ComponentList &componen
     component_list.Append<ApiHandler>();
 }
 
-}  // namespace my_database
+}  // namespace most

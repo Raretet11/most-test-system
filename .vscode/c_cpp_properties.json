@@ -9,7 +9,8 @@
             "cppStandard": "c++17",
             "includePath": [
                 "${default}",
-                "${workspaceFolder}/build-debug/_deps/userver-src/core/include"
+                "${workspaceFolder}/build-debug/_deps/userver-src/core/include",
+                "${workspaceFolder}/build-release/_deps/userver-src/core/include"
             ]
         }
     ],
