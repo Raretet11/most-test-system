@@ -22,7 +22,7 @@ async def test_load_task_and_send_ok_solution(service_client):
     )
     assert response.status == 200
     assert response.text == 'OK'
-    
+
     response = await service_client.post(
         '/v1/submit?task-id=1&code=import%20sys%0Ainput_data\
             %20%3D%20sys.argv%5B1%5D%0Aa%2C%20b%20%3D%20map\
@@ -39,7 +39,7 @@ async def test_load_task_and_send_wa_solution(service_client):
     )
     assert response.status == 200
     assert response.text == 'OK'
-    
+
     response = await service_client.post(
         'v1/submit?task-id=1&code=import%20sys%0Ainput_data%20%3D%20sys.\
             argv%5B1%5D%0Aa%2C%20b%20%3D%20map(int%2C%20input_data.split())\
