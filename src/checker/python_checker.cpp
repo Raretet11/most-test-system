@@ -1,14 +1,15 @@
-#include "PythonChecker.hpp"
-
+#include "python_checker.hpp"
+#include <array>
 #include <fstream>
 #include <memory>
-#include <iostream>
-#include <array>
 #include <string>
 
 namespace checker {
 
-CheckerResult PythonChecker::check_solution(const std::string &code, const std::vector<Problem> &problems) {
+CheckerResult PythonChecker::check_solution(
+    const std::string &code,
+    const std::vector<Problem> &problems
+) {
     save_code_to_file(code);
 
     bool ok = true;
@@ -18,12 +19,15 @@ CheckerResult PythonChecker::check_solution(const std::string &code, const std::
         }
     }
 
-    if (ok) return CheckerResult::kOK;
+    if (ok) {
+        return CheckerResult::kOK;
+    }
     return CheckerResult::kWrongAnswer;
 };
 
 std::string PythonChecker::get_checker_command() {
-    std::string cmd = "python "; cmd += get_filename();
+    std::string cmd = "python ";
+    cmd += get_filename();
     return cmd;
 };
 
@@ -40,7 +44,9 @@ void PythonChecker::save_code_to_file(const std::string &code) {
 std::string PythonChecker::execute_file(const std::string &inputData) {
     std::string command = get_checker_command() + " \"" + inputData + "\"";
 
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(command.c_str(), "r"), pclose);
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(
+        popen(command.c_str(), "r"), pclose
+    );
 
     std::array<char, 128> buffer;
     std::string result;
@@ -56,7 +62,8 @@ CheckerResult PythonChecker::check_code_output(const Problem &problem) {
     std::string code_result = execute_file(problem.input);
     if (code_result == problem.expected_output) {
         return CheckerResult::kOK;
-    } return CheckerResult::kWrongAnswer;
+    }
+    return CheckerResult::kWrongAnswer;
 };
 
-}; // namespace checker
+};  // namespace checker

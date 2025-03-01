@@ -4,7 +4,7 @@ namespace checker {
 
 namespace {
 
-std::vector<std::string> split(std::string s, const std::string& delimiter) {
+std::vector<std::string> split(std::string s, const std::string &delimiter) {
     std::vector<std::string> tokens;
     size_t pos = 0;
     std::string token;
@@ -18,13 +18,13 @@ std::vector<std::string> split(std::string s, const std::string& delimiter) {
     return tokens;
 };
 
-} // namespace
+}  // namespace
 
 std::vector<Problem> decode_tests(const std::string &test) {
     std::vector<Problem> res;
 
     auto splited_tests = split(test, "|");
-    
+
     for (size_t i = 0; i < splited_tests.size(); i++) {
         auto cur = split(splited_tests[i], "#");
         res.emplace_back(cur[0], cur[1]);
@@ -32,4 +32,4 @@ std::vector<Problem> decode_tests(const std::string &test) {
     return res;
 }
 
-}; // namespace checker
+};  // namespace checker

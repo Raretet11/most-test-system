@@ -1,13 +1,12 @@
 #include "load_task.hpp"
-#include "../checker/PythonChecker.hpp"
 #include <fmt/format.h>
+#include <string>
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
 #include <userver/server/handlers/http_handler_base.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
-#include <string>
 
 namespace most {
 
@@ -38,8 +37,8 @@ public:
         // TODO: validate
         auto result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "INSERT INTO most_db.tasks(name, tests) VALUES($1, $2)",
-            task_name, tests
+            "INSERT INTO most_db.tasks(name, tests) VALUES($1, $2)", task_name,
+            tests
         );
 
         return "OK";
@@ -50,7 +49,9 @@ public:
 
 }  // namespace
 
-void append_task_loader_component(userver::components::ComponentList &component_list) {
+void append_task_loader_component(
+    userver::components::ComponentList &component_list
+) {
     component_list.Append<ApiHandler>();
 }
 

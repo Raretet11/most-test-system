@@ -1,12 +1,15 @@
 #pragma once
 
-#include "AbstractChecker.hpp"
+#include "abstract_checker.hpp"
 
 namespace checker {
 
 class PythonChecker : AbstractChecker {
 public:
-    CheckerResult check_solution(const std::string &solution, const std::vector<Problem> &problems) final;
+    CheckerResult check_solution(
+        const std::string &solution,
+        const std::vector<Problem> &problems
+    ) final;
 
 private:
     std::string get_filename() final;
@@ -18,4 +21,4 @@ private:
     CheckerResult check_code_output(const Problem &problem) final;
 };
 
-} // namespace checker
+}  // namespace checker

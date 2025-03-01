@@ -1,14 +1,14 @@
 #include "submit_solution.hpp"
-#include "../checker/PythonChecker.hpp"
-#include "test_decoder.hpp"
 #include <fmt/format.h>
+#include <string>
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
 #include <userver/server/handlers/http_handler_base.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
-#include <string>
+#include "../checker/python_checker.hpp"
+#include "test_decoder.hpp"
 
 namespace most {
 
@@ -37,11 +37,10 @@ public:
         const auto &solution = request.GetArg("code");
 
         auto p = checker::PythonChecker();
-        
+
         auto result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "SELECT tests FROM most_db.tasks WHERE id = ($1);",
-            task_id
+            "SELECT tests FROM most_db.tasks WHERE id = ($1);", task_id
         );
 
         auto tests = result.AsSingleRow<std::string>();
@@ -55,7 +54,8 @@ public:
 
         result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "INSERT INTO most_db.solutions(task_id, language, code, verdict) VALUES($1, $2, $3, $4)",
+            "INSERT INTO most_db.solutions(task_id, language, code, verdict) "
+            "VALUES($1, $2, $3, $4)",
             task_id, "python", solution, res
         );
 
@@ -67,7 +67,9 @@ public:
 
 }  // namespace
 
-void append_task_submiter_component(userver::components::ComponentList &component_list) {
+void append_task_submiter_component(
+    userver::components::ComponentList &component_list
+) {
     component_list.Append<ApiHandler>();
 }
 

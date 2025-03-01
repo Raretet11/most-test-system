@@ -15,9 +15,9 @@ userver_setup_environment()
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
-    src/checker/AbstractChecker.hpp
-    src/checker/PythonChecker.hpp
-    src/checker/PythonChecker.cpp
+    src/checker/abstract_checker.hpp
+    src/checker/python_checker.hpp
+    src/checker/python_checker.cpp
 
     src/user_component/submit_solution.hpp
     src/user_component/submit_solution.cpp
