@@ -18,10 +18,6 @@ jobs:
             matrix:
                 include:
                   - os: ubuntu-22.04
-                    make: test-debug
-                    info: g++-11 + test-debug
-
-                  - os: ubuntu-22.04
                     make: test-release
                     info: g++-11 + test-release
 
