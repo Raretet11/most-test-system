@@ -10,6 +10,9 @@ if(NOT userver_FOUND)
   download_userver(TRY_DIR third_party/userver)
 endif()
 
+# Include directories
+include_directories(src)
+
 userver_setup_environment()
 
 
@@ -34,6 +37,13 @@ target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 # The Service
 add_executable(${PROJECT_NAME} src/main.cpp)
 target_link_libraries(${PROJECT_NAME} PRIVATE ${PROJECT_NAME}_objs)
+
+# Unit Tests
+add_executable(${PROJECT_NAME}_unittest
+    src/checker_test/python_checker_test.cpp
+)
+target_link_libraries(${PROJECT_NAME}_unittest PRIVATE ${PROJECT_NAME}_objs userver::utest)
+add_google_tests(${PROJECT_NAME}_unittest)
 
 # Functional Tests
 userver_testsuite_add_simple()

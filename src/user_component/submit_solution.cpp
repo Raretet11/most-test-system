@@ -7,7 +7,7 @@
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
-#include "../checker/python_checker.hpp"
+#include "checker/python_checker.hpp"
 #include "test_decoder.hpp"
 
 namespace most {
