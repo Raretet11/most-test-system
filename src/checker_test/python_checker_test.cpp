@@ -1,4 +1,4 @@
-#include "../checker/python_checker.hpp"
+#include "checker/python_checker.hpp"
 #include <userver/utest/utest.hpp>
 #include <vector>
 

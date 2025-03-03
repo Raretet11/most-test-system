@@ -10,6 +10,9 @@ if(NOT userver_FOUND)
   download_userver(TRY_DIR third_party/userver)
 endif()
 
+# Include directories
+include_directories(src)
+
 userver_setup_environment()
 
 
