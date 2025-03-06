@@ -30,6 +30,12 @@ add_library(${PROJECT_NAME}_objs OBJECT
 
     src/admin_component/load_task.hpp
     src/admin_component/load_task.cpp
+
+    src/checker_components/submission_feedback.hpp
+    src/checker_components/submission_feedback.cpp
+
+    src/checker_components/problem.hpp
+    src/checker_components/execution_status.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 

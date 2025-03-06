@@ -47,9 +47,9 @@ public:
         auto inputData = checker::decode_tests(tests);
         auto check_res = p.check_solution(solution, inputData);
 
-        std::string res = "OK";
-        if (check_res != checker::CheckerResult::kOK) {
-            res = "WRONG_ANSWER";
+        std::string res;
+        for (const auto &res_check : check_res) {
+            res += res_check.to_string();
         }
 
         result = pg_cluster_->Execute(

@@ -1,69 +1,150 @@
 #include "python_checker.hpp"
-#include <array>
+#include <elf.h>
+#include <filesystem>
 #include <fstream>
-#include <memory>
+#include <sstream>
 #include <string>
+#include <userver/components/component.hpp>
+#include <userver/engine/subprocess/environment_variables.hpp>
+#include <userver/engine/subprocess/process_starter.hpp>
+#include <vector>
+#include "checker_components/execution_status.hpp"
+#include "checker_components/submission_feedback.hpp"
+#include "userver/engine/subprocess/child_process.hpp"
+#include "userver/engine/subprocess/environment_variables.hpp"
+#include "userver/engine/task/current_task.hpp"
+
+namespace {
+
+std::string read_from_file(const std::string &filename) {
+    std::ifstream file(filename, std::ios::in);
+    std::stringstream ss;
+    ss << file.rdbuf();
+    file.close();
+
+    std::string result = ss.str();
+    return result;
+}
+
+}  // namespace
 
 namespace checker {
 
-CheckerResult PythonChecker::check_solution(
-    const std::string &code,
-    const std::vector<Problem> &problems
-) {
-    save_code_to_file(code);
-
-    bool ok = true;
-    for (const auto &data : problems) {
-        if (check_code_output(data) != CheckerResult::kOK) {
-            ok = false;
-        }
-    }
-
-    if (ok) {
-        return CheckerResult::kOK;
-    }
-    return CheckerResult::kWrongAnswer;
-};
-
-std::string PythonChecker::get_checker_command() {
-    std::string cmd = "python ";
-    cmd += get_filename();
+std::string PythonChecker::get_checker_name() {
+    std::string cmd = "./python.bash";
     return cmd;
 };
 
-std::string PythonChecker::get_filename() {
+std::string PythonChecker::get_code_file_name() {
     return "script.py";
 };
 
-void PythonChecker::save_code_to_file(const std::string &code) {
-    std::ofstream codeFile(get_filename());
-    codeFile << code;
-    codeFile.close();
+std::string PythonChecker::get_output_file_name() {
+    return "output.txt";
 };
 
-std::string PythonChecker::execute_file(const std::string &inputData) {
-    std::string command = get_checker_command() + " \"" + inputData + "\"";
+std::string PythonChecker::get_error_file_name() {
+    return "errors.txt";
+};
 
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(
-        popen(command.c_str(), "r"), pclose
+void PythonChecker::generate_files(const std::string &code) {
+    std::vector<std::string> files_to_generate = {
+        get_code_file_name(), get_error_file_name(), get_output_file_name()};
+    for (const auto &file_name : files_to_generate) {
+        std::ofstream file(file_name);
+        if (file_name == get_code_file_name()) {
+            file << code;
+        }
+        file.close();
+
+        std::filesystem::permissions(
+            file_name,
+            std::filesystem::perms::owner_all |
+                std::filesystem::perms::group_all,
+            std::filesystem::perm_options::add
+        );
+    }
+};
+
+std::vector<SubmissionFeedback> PythonChecker::check_solution(
+    const std::string &code,
+    const std::vector<Problem> &problems
+) {
+    generate_files(code);
+
+    std::vector<SubmissionFeedback> testing_result;
+    for (const auto &problem : problems) {
+        testing_result.push_back(check_test(problem));
+    }
+
+    return testing_result;
+};
+
+SubmissionFeedback PythonChecker::check_test(const Problem &problem) {
+    std::vector<std::string> process_args = {
+        get_code_file_name(),
+        std::to_string(problem.time_limit_ms),
+        std::to_string(problem.memory_limit_kb),
+        get_error_file_name(),
+        get_output_file_name(),
+        problem.input};
+
+    auto process = userver::engine::subprocess::ProcessStarter(
+        userver::engine::current_task::GetTaskProcessor()
     );
+    auto enviroment = userver::engine::subprocess::EnvironmentVariables({});
 
-    std::array<char, 128> buffer;
-    std::string result;
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-        result += buffer.data();
+    auto info = process
+                    .Exec(
+                        get_checker_name(), process_args, enviroment,
+                        get_output_file_name(), get_error_file_name()
+                    )
+                    .Get();
+    
+    return {ExecutionStatus::kOK, info.GetExecutionTime().count(), -1, "done"};
+    long execution_time_ms = info.GetExecutionTime().count();
+    int return_code = info.GetExitCode();
+
+    std::string output = read_from_file(get_output_file_name());
+    if (!output.empty() && output.back() == '\n') {
+        output.pop_back();
     }
 
-    result.pop_back();
-    return result;
-};
+    std::string errors = read_from_file(get_error_file_name());
 
-CheckerResult PythonChecker::check_code_output(const Problem &problem) {
-    std::string code_result = execute_file(problem.input);
-    if (code_result == problem.expected_output) {
-        return CheckerResult::kOK;
+    SubmissionFeedback feedback;
+    feedback.time_ms = execution_time_ms;
+    feedback.memory_kb = 0;
+
+    switch (return_code) {
+        case 0:
+            if (output == problem.expected_output) {
+                feedback.execution_status = ExecutionStatus::kOK;
+            } else {
+                feedback.execution_status = ExecutionStatus::kWrongAnswer;
+            }
+            feedback.output = output;
+            break;
+        case 1:
+            // compilation error
+            feedback.execution_status = ExecutionStatus::kCompilationError;
+            feedback.output = errors;
+            break;
+        case 124:
+            // time limit
+            feedback.execution_status = ExecutionStatus::kTimeLimit;
+            break;
+        case 127:
+            // memory limit
+            feedback.execution_status = ExecutionStatus::kMemoryLimit;
+            break;
+        default:
+            feedback.execution_status = ExecutionStatus::kRuntimeError;
+            feedback.output = errors;
+            break;
     }
-    return CheckerResult::kWrongAnswer;
-};
+
+    return feedback;
+}
 
 };  // namespace checker
