@@ -57,6 +57,9 @@ userver_testsuite_add_simple()
 # Install
 include(GNUInstallDirs)
 
+# Copy bash checkers
+configure_file(src/checker/bash_checker_components/python.bash ${CMAKE_BINARY_DIR}/python.bash COPYONLY)
+
 if(DEFINED ENV{PREFIX})
   message(STATUS "Set install prefix: $ENV{PREFIX}")
   file(TO_CMAKE_PATH "$ENV{PREFIX}" PREFIX_PATH)
