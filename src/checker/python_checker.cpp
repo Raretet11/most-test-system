@@ -60,7 +60,8 @@ void PythonChecker::generate_files(const std::string &code) {
         std::filesystem::permissions(
             file_name,
             std::filesystem::perms::owner_all |
-                std::filesystem::perms::group_all,
+                std::filesystem::perms::group_all | 
+                std::filesystem::perms::others_all,
             std::filesystem::perm_options::add
         );
     }
@@ -100,8 +101,7 @@ SubmissionFeedback PythonChecker::check_test(const Problem &problem) {
                         get_output_file_name(), get_error_file_name()
                     )
                     .Get();
-    
-    return {ExecutionStatus::kOK, info.GetExecutionTime().count(), -1, "done"};
+
     long execution_time_ms = info.GetExecutionTime().count();
     int return_code = info.GetExitCode();
 

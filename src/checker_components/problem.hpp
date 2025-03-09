@@ -12,7 +12,7 @@ struct Problem {
     Problem(
         const std::string &input_,
         const std::string &expected_output_,
-        long time_limit_ms_ = 1000,
+        long time_limit_ms_ = 100,
         long memory_limit_kb_ = 1024
     )
         : input(input_),
