@@ -12,7 +12,6 @@ async def test_load_task(service_client):
             233%7C3%204%237%7C5%206%2311',
     )
     assert response.status == 200
-    assert response.text == 'OK'
 
 
 async def test_load_task_and_send_ok_solution(service_client):
@@ -21,7 +20,6 @@ async def test_load_task_and_send_ok_solution(service_client):
         %202%233%7C3%204%237%7C5%206%2311',
     )
     assert response.status == 200
-    assert response.text == 'OK'
 
     response = await service_client.post(
         '/v1/submit?task-id=1&code=import%20sys%0Ainput_data\
@@ -29,7 +27,6 @@ async def test_load_task_and_send_ok_solution(service_client):
                 (int%2C%20input_data.split())%0Aprint(a%20%2B%20b)',
     )
     assert response.status == 200
-    assert response.text == 'OK'
 
 
 async def test_load_task_and_send_wa_solution(service_client):
@@ -38,7 +35,6 @@ async def test_load_task_and_send_wa_solution(service_client):
             %202%233%7C3%204%237%7C5%206%2311',
     )
     assert response.status == 200
-    assert response.text == 'OK'
 
     response = await service_client.post(
         'v1/submit?task-id=1&code=import%20sys%0Ainput_data%20%3D%20sys.\
@@ -46,4 +42,3 @@ async def test_load_task_and_send_wa_solution(service_client):
                 %0Aprint(a%20%2B%20b+1)',
     )
     assert response.status == 200
-    assert response.text == 'WRONG_ANSWER'

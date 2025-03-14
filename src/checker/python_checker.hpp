@@ -1,24 +1,25 @@
 #pragma once
 
 #include "abstract_checker.hpp"
+#include "checker_components/submission_feedback.hpp"
 
 namespace checker {
 
-class PythonChecker : AbstractChecker {
+class PythonChecker : public AbstractChecker {
 public:
-    CheckerResult check_solution(
+    [[nodiscard]] std::vector<SubmissionFeedback> check_solution(
         const std::string &solution,
         const std::vector<Problem> &problems
-    ) final;
+    ) const override;
 
 private:
-    std::string get_filename() final;
-    std::string get_checker_command() final;
+    std::string get_code_file_name() const;
+    std::string get_checker_name() const;
+    std::string get_output_file_name() const;
+    std::string get_error_file_name() const;
 
-    void save_code_to_file(const std::string &code) final;
-    std::string execute_file(const std::string &input) final;
-
-    CheckerResult check_code_output(const Problem &problem) final;
+    void generate_files(const std::string &solution) const;
+    SubmissionFeedback check_test(const Problem &problem) const override;
 };
 
 }  // namespace checker

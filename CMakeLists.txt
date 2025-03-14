@@ -18,17 +18,9 @@ userver_setup_environment()
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
-    src/checker/abstract_checker.hpp
-    src/checker/python_checker.hpp
     src/checker/python_checker.cpp
-
-    src/user_component/submit_solution.hpp
     src/user_component/submit_solution.cpp
-
-    src/user_component/test_decoder.hpp
     src/user_component/test_decoder.cpp
-
-    src/admin_component/load_task.hpp
     src/admin_component/load_task.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
@@ -50,6 +42,9 @@ userver_testsuite_add_simple()
 
 # Install
 include(GNUInstallDirs)
+
+# Copy bash checkers
+configure_file(src/checker/bash_checker_components/python.bash ${CMAKE_BINARY_DIR}/python.bash COPYONLY)
 
 if(DEFINED ENV{PREFIX})
   message(STATUS "Set install prefix: $ENV{PREFIX}")
