@@ -5,7 +5,9 @@ CREATE SCHEMA IF NOT EXISTS most_db;
 CREATE TABLE IF NOT EXISTS most_db.tasks (
     id SERIAL PRIMARY KEY,
     name TEXT,
-    tests TEXT
+    tests TEXT,
+    time_limit INTEGER,
+    memory_limit INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS most_db.solutions (
@@ -13,5 +15,6 @@ CREATE TABLE IF NOT EXISTS most_db.solutions (
     task_id INTEGER REFERENCES most_db.tasks(id) ON DELETE CASCADE,
     language TEXT,
     code TEXT,
+    time_limit INTEGER,
     verdict TEXT
 );

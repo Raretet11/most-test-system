@@ -1,20 +1,23 @@
 #include "submit_solution.hpp"
 #include <fmt/format.h>
+#include <cstdint>
+#include <format>
 #include <string>
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
-#include <userver/server/handlers/http_handler_base.hpp>
+#include <userver/server/handlers/http_handler_json_base.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
 #include "checker/python_checker.hpp"
+#include "checker_components/execution_status.hpp"
 #include "test_decoder.hpp"
 
 namespace most {
 
 namespace {
 
-class ApiHandler final : public userver::server::handlers::HttpHandlerBase {
+class ApiHandler final : public userver::server::handlers::HttpHandlerJsonBase {
 public:
     static constexpr std::string_view kName = "handler-user-submit-solution";
 
@@ -22,7 +25,7 @@ public:
         const userver::components::ComponentConfig &config,
         const userver::components::ComponentContext &component_context
     )
-        : HttpHandlerBase(config, component_context),
+        : HttpHandlerJsonBase(config, component_context),
           pg_cluster_(
               component_context
                   .FindComponent<userver::components::Postgres>("postgres-db-1")
@@ -30,11 +33,12 @@ public:
           ) {
     }
 
-    std::string
-    HandleRequestThrow(const userver::server::http::HttpRequest &request, userver::server::request::RequestContext &)
+    userver::formats::json::Value
+    HandleRequestJsonThrow(const userver::server::http::HttpRequest &, const userver::formats::json::Value &json, userver::server::request::RequestContext &)
         const override {
-        const auto &task_id = std::stoi(request.GetArg("task-id"));
-        const auto &solution = request.GetArg("code");
+        const auto &task_id = json["task_id"].As<int>();
+        const auto &language = json["language"].As<std::string>();
+        const auto &solution = json["solution"].As<std::string>();
 
         auto p = checker::PythonChecker();
 
@@ -48,18 +52,30 @@ public:
         auto check_res = p.check_solution(solution, inputData);
 
         std::string res;
-        for (const auto &_ : check_res) {
-            res += "Done\n";
+        checker::ExecutionStatus status = checker::ExecutionStatus::kOK;
+        int max_time_needed = 0;
+        for (const auto &feedback : check_res) {
+            max_time_needed =
+                std::max(max_time_needed, static_cast<int>(feedback.time_ms));
+            if (feedback.execution_status != checker::ExecutionStatus::kOK) {
+                status = feedback.execution_status;
+                break;
+            }
         }
 
         result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "INSERT INTO most_db.solutions(task_id, language, code, verdict) "
-            "VALUES($1, $2, $3, $4)",
-            task_id, "python", solution, res
+            "INSERT INTO most_db.solutions(task_id, language, code, "
+            "time_limit, verdict) "
+            "VALUES($1, $2, $3, $4, $5)",
+            task_id, language, solution, max_time_needed,
+            std::to_string(static_cast<int>(status))
         );
 
-        return res;
+        std::string json_out =
+            "{ \"verdict\":" + std::to_string(static_cast<int>(status)) +
+            ",\n \"max_time_needed\":" + std::to_string(max_time_needed) + "}";
+        return userver::formats::json::FromString(json_out);
     }
 
     userver::storages::postgres::ClusterPtr pg_cluster_;

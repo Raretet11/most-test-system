@@ -3,16 +3,16 @@
 #include <string>
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
-#include <userver/server/handlers/http_handler_base.hpp>
+#include <userver/server/handlers/http_handler_json_base.hpp>
 #include <userver/storages/postgres/cluster.hpp>
 #include <userver/storages/postgres/component.hpp>
-#include <userver/utils/assert.hpp>
+#include "userver/formats/json/value.hpp"
 
 namespace most {
 
 namespace {
 
-class ApiHandler final : public userver::server::handlers::HttpHandlerBase {
+class ApiHandler final : public userver::server::handlers::HttpHandlerJsonBase {
 public:
     static constexpr std::string_view kName = "handler-admin-load-task";
 
@@ -20,7 +20,7 @@ public:
         const userver::components::ComponentConfig &config,
         const userver::components::ComponentContext &component_context
     )
-        : HttpHandlerBase(config, component_context),
+        : HttpHandlerJsonBase(config, component_context),
           pg_cluster_(
               component_context
                   .FindComponent<userver::components::Postgres>("postgres-db-1")
@@ -28,20 +28,26 @@ public:
           ) {
     }
 
-    std::string
-    HandleRequestThrow(const userver::server::http::HttpRequest &request, userver::server::request::RequestContext &)
+    userver::formats::json::Value
+    HandleRequestJsonThrow(const userver::server::http::HttpRequest &, const userver::formats::json::Value &json, userver::server::request::RequestContext &)
         const override {
-        const auto &task_name = request.GetArg("name");
-        const auto &tests = request.GetArg("tests");
+        const auto &task_name = json["name"].As<std::string>();
+        const auto &tests = json["tests"].As<std::string>();
+        const auto &time_limit = json["time_limit"].As<int>();
+        const auto &memory_limit = json["memory_limit"].As<int>();
 
         // TODO: validate
         auto result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "INSERT INTO most_db.tasks(name, tests) VALUES($1, $2)", task_name,
-            tests
+            "INSERT INTO most_db.tasks(name, tests, time_limit, memory_limit) "
+            "VALUES($1, $2, $3, $4)",
+            task_name, tests, time_limit, memory_limit
         );
 
-        return "OK";
+        std::string out = "{ \"result\": \"" + task_name + " " + tests + " " +
+                          std::to_string(time_limit) + " " +
+                          std::to_string(memory_limit) + "\"}";
+        return userver::formats::json::FromString(out);
     }
 
     userver::storages::postgres::ClusterPtr pg_cluster_;

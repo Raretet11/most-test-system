@@ -1,4 +1,5 @@
 import pytest
+import json
 
 from testsuite.databases import pgsql
 
@@ -7,38 +8,67 @@ from testsuite.databases import pgsql
 
 
 async def test_load_task(service_client):
+    data = {
+        "name": "Sum",
+        "tests": "1 2#3|3 4#7|5 -1#4",
+        "time_limit": 1000,
+        "memory_limit": 1024,
+    }
+    headers = {"Content-Type": "application/json"}
+
     response = await service_client.post(
-        '/v1/load?name=Sum%20of%20Two%20Numbers&tests=1%202%\
-            233%7C3%204%237%7C5%206%2311',
+        "/v1/load", data=json.dumps(data), headers=headers
     )
     assert response.status == 200
 
 
 async def test_load_task_and_send_ok_solution(service_client):
+    data = {
+        "name": "Sum",
+        "tests": "1 2#3|3 4#7|5 -1#4",
+        "time_limit": 1000,
+        "memory_limit": 1024,
+    }
+    headers = {"Content-Type": "application/json"}
+
     response = await service_client.post(
-        '/v1/load?name=Sum%20of%20Two%20Numbers&tests=1\
-        %202%233%7C3%204%237%7C5%206%2311',
+        "/v1/load", data=json.dumps(data), headers=headers
     )
     assert response.status == 200
 
+    data = {
+        "task_id": 1,
+        "language": "python",
+        "solution": "a, b = map(int, input().split())\nprint(a + b)",
+    }
+
     response = await service_client.post(
-        '/v1/submit?task-id=1&code=import%20sys%0Ainput_data\
-            %20%3D%20sys.argv%5B1%5D%0Aa%2C%20b%20%3D%20map\
-                (int%2C%20input_data.split())%0Aprint(a%20%2B%20b)',
+        "/v1/submit", data=json.dumps(data), headers=headers
     )
     assert response.status == 200
 
 
 async def test_load_task_and_send_wa_solution(service_client):
+    data = {
+        "name": "Sum",
+        "tests": "1 2#3|3 4#7|5 -1#4",
+        "time_limit": 1000,
+        "memory_limit": 1024,
+    }
+    headers = {"Content-Type": "application/json"}
+
     response = await service_client.post(
-        '/v1/load?name=Sum%20of%20Two%20Numbers&tests=1\
-            %202%233%7C3%204%237%7C5%206%2311',
+        "/v1/load", data=json.dumps(data), headers=headers
     )
     assert response.status == 200
 
+    data = {
+        "task_id": 1,
+        "language": "python",
+        "solution": "a, b = map(int, input().split())\nprint(a + b + 1)",
+    }
+
     response = await service_client.post(
-        'v1/submit?task-id=1&code=import%20sys%0Ainput_data%20%3D%20sys.\
-            argv%5B1%5D%0Aa%2C%20b%20%3D%20map(int%2C%20input_data.split())\
-                %0Aprint(a%20%2B%20b+1)',
+        "/v1/submit", data=json.dumps(data), headers=headers
     )
     assert response.status == 200
