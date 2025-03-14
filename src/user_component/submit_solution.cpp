@@ -48,8 +48,8 @@ public:
         auto check_res = p.check_solution(solution, inputData);
 
         std::string res;
-        for (const auto &res_check : check_res) {
-            res += res_check.to_string();
+        for (const auto &_ : check_res) {
+            res += "Done\n";
         }
 
         result = pg_cluster_->Execute(

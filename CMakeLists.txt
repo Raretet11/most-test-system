@@ -18,24 +18,10 @@ userver_setup_environment()
 
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
-    src/checker/abstract_checker.hpp
-    src/checker/python_checker.hpp
     src/checker/python_checker.cpp
-
-    src/user_component/submit_solution.hpp
     src/user_component/submit_solution.cpp
-
-    src/user_component/test_decoder.hpp
     src/user_component/test_decoder.cpp
-
-    src/admin_component/load_task.hpp
     src/admin_component/load_task.cpp
-
-    src/checker_components/submission_feedback.hpp
-    src/checker_components/submission_feedback.cpp
-
-    src/checker_components/problem.hpp
-    src/checker_components/execution_status.hpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 
