@@ -1,7 +1,5 @@
 #include "submit_solution.hpp"
 #include <fmt/format.h>
-#include <cstdint>
-#include <format>
 #include <string>
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
