@@ -1,4 +1,4 @@
-#include "load_task.hpp"
+#include "get_all_tasks.hpp"
 #include <fmt/format.h>
 #include <string>
 #include <userver/clients/dns/component.hpp>
@@ -14,7 +14,7 @@ namespace {
 
 class ApiHandler final : public userver::server::handlers::HttpHandlerJsonBase {
 public:
-    static constexpr std::string_view kName = "handler-admin-load-task";
+    static constexpr std::string_view kName = "handler-api-get-all-tasks";
 
     ApiHandler(
         const userver::components::ComponentConfig &config,
@@ -29,25 +29,22 @@ public:
     }
 
     userver::formats::json::Value
-    HandleRequestJsonThrow(const userver::server::http::HttpRequest &, const userver::formats::json::Value &json, userver::server::request::RequestContext &)
+    HandleRequestJsonThrow(const userver::server::http::HttpRequest &, const userver::formats::json::Value &, userver::server::request::RequestContext &)
         const override {
-        const auto &task_name = json["name"].As<std::string>();
-        const auto &tests = json["tests"].As<std::string>();
-        const auto &time_limit = json["time_limit"].As<int>();
-        const auto &memory_limit = json["memory_limit"].As<int>();
-
-        // TODO: validate
         auto result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "INSERT INTO most_db.tasks(name, tests, time_limit, memory_limit) "
-            "VALUES($1, $2, $3, $4)",
-            task_name, tests, time_limit, memory_limit
+            "SELECT id, name FROM most_db.tasks;"
         );
 
-        std::string out = "{ \"result\": \"" + task_name + " " + tests + " " +
-                          std::to_string(time_limit) + " " +
-                          std::to_string(memory_limit) + "\"}";
-        return userver::formats::json::FromString(out);
+        userver::formats::json::ValueBuilder json_builder;
+        for (const auto &row : result) {
+            userver::formats::json::ValueBuilder task_json;
+            task_json["id"] = row["id"].As<int>();
+            task_json["name"] = row["name"].As<std::string>();
+            json_builder.PushBack(task_json.ExtractValue());
+        }
+
+        return json_builder.ExtractValue();
     }
 
     userver::storages::postgres::ClusterPtr pg_cluster_;
@@ -55,7 +52,7 @@ public:
 
 }  // namespace
 
-void append_task_loader_component(
+void append_task_api_handler_get_all_tasks_component(
     userver::components::ComponentList &component_list
 ) {
     component_list.Append<ApiHandler>();

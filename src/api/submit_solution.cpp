@@ -9,7 +9,7 @@
 #include <userver/utils/assert.hpp>
 #include "checker/python_checker.hpp"
 #include "checker_components/execution_status.hpp"
-#include "test_decoder.hpp"
+#include "checker_components/test_decoder.hpp"
 
 namespace most {
 
@@ -17,7 +17,7 @@ namespace {
 
 class ApiHandler final : public userver::server::handlers::HttpHandlerJsonBase {
 public:
-    static constexpr std::string_view kName = "handler-user-submit-solution";
+    static constexpr std::string_view kName = "handler-api-submit-solution";
 
     ApiHandler(
         const userver::components::ComponentConfig &config,

@@ -50,14 +50,24 @@ components_manager:
             throttling_enabled: false
             url_trailing_slash: strict-match
 
-        handler-user-submit-solution:
-            path: /v1/submit
+        handler-api-submit-solution:
+            path: /api/solutions/submit
             method: POST
             task_processor: main-task-processor
 
-        handler-admin-load-task:
-            path: /v1/load
+        handler-api-load-task:
+            path: /api/tasks/load
             method: POST
+            task_processor: main-task-processor
+
+        handler-api-get-all-tasks:
+            path: /api/tasks/get-all
+            method: GET
+            task_processor: main-task-processor
+
+        handler-api-get-task-by-id:
+            path: /api/tasks/get-by-id/{id}
+            method: GET
             task_processor: main-task-processor
 
         postgres-db-1:

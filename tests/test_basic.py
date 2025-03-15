@@ -17,7 +17,7 @@ async def test_load_task(service_client):
     headers = {"Content-Type": "application/json"}
 
     response = await service_client.post(
-        "/v1/load", data=json.dumps(data), headers=headers
+        "/api/tasks/load", data=json.dumps(data), headers=headers
     )
     assert response.status == 200
 
@@ -32,7 +32,7 @@ async def test_load_task_and_send_ok_solution(service_client):
     headers = {"Content-Type": "application/json"}
 
     response = await service_client.post(
-        "/v1/load", data=json.dumps(data), headers=headers
+        "/api/tasks/load", data=json.dumps(data), headers=headers
     )
     assert response.status == 200
 
@@ -43,7 +43,7 @@ async def test_load_task_and_send_ok_solution(service_client):
     }
 
     response = await service_client.post(
-        "/v1/submit", data=json.dumps(data), headers=headers
+        "/api/solutions/submit", data=json.dumps(data), headers=headers
     )
     assert response.status == 200
 
@@ -58,7 +58,7 @@ async def test_load_task_and_send_wa_solution(service_client):
     headers = {"Content-Type": "application/json"}
 
     response = await service_client.post(
-        "/v1/load", data=json.dumps(data), headers=headers
+        "/api/tasks/load", data=json.dumps(data), headers=headers
     )
     assert response.status == 200
 
@@ -69,6 +69,6 @@ async def test_load_task_and_send_wa_solution(service_client):
     }
 
     response = await service_client.post(
-        "/v1/submit", data=json.dumps(data), headers=headers
+        "/api/solutions/submit", data=json.dumps(data), headers=headers
     )
     assert response.status == 200
