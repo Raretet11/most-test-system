@@ -22,6 +22,7 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/user_component/submit_solution.cpp
     src/user_component/test_decoder.cpp
     src/admin_component/load_task.cpp
+    src/admin_component/unload_all_solution.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 
