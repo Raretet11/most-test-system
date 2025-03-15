@@ -38,14 +38,14 @@ public:
 
         const auto result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "SELECT id, name, tests, time_limit, memory_limit FROM "
+            "SELECT id, name, tests, legend, time_limit, memory_limit FROM "
             "most_db.tasks "
             "WHERE id = $1",
             std::stoi(task_id)
         );
 
         const auto task = result.AsSingleRow<
-            std::tuple<int, std::string, std::string, int, int>>(
+            std::tuple<int, std::string, std::string, std::string, int, int>>(
             userver::storages::postgres::kRowTag
         );
 
@@ -53,8 +53,9 @@ public:
         json["id"] = std::get<0>(task);
         json["name"] = std::get<1>(task);
         json["tests"] = std::get<2>(task);
-        json["time_limit"] = std::get<3>(task);
-        json["memory_limit"] = std::get<4>(task);
+        json["legend"] = std::get<3>(task);
+        json["time_limit"] = std::get<4>(task);
+        json["memory_limit"] = std::get<5>(task);
 
         return userver::formats::json::ToString(json.ExtractValue());
     }

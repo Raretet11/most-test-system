@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS most_db.tasks (
     id SERIAL PRIMARY KEY,
     name TEXT,
     tests TEXT,
+    legend TEXT,
     time_limit INTEGER,
     memory_limit INTEGER
 );
@@ -16,5 +17,6 @@ CREATE TABLE IF NOT EXISTS most_db.solutions (
     language TEXT,
     code TEXT,
     time_limit INTEGER,
-    verdict TEXT
+    verdict TEXT,
+    last_test INTEGER
 );

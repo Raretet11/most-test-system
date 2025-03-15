@@ -15,6 +15,31 @@ namespace most {
 
 namespace {
 
+std::string execution_status_to_string(const checker::ExecutionStatus &status) {
+    std::string result = "";
+    switch (status) {
+        case checker::ExecutionStatus::kOK:
+            result = "Accepted!";
+            break;
+        case checker::ExecutionStatus::kWrongAnswer:
+            result = "Wrong answer!";
+            break;
+        case checker::ExecutionStatus::kCompilationError:
+            result = "Compilation Error";
+            break;
+        case checker::ExecutionStatus::kTimeLimit:
+            result = "Time Limit exceeded";
+            break;
+        case checker::ExecutionStatus::kMemoryLimit:
+            result = "Memory Limit exceeded";
+            break;
+        default:
+            result = "Runtime Error";
+            break;
+    }
+    return result;
+}
+
 class ApiHandler final : public userver::server::handlers::HttpHandlerJsonBase {
 public:
     static constexpr std::string_view kName = "handler-api-submit-solution";
@@ -52,6 +77,7 @@ public:
         std::string res;
         checker::ExecutionStatus status = checker::ExecutionStatus::kOK;
         int max_time_needed = 0;
+        int last_test = 0;
         for (const auto &feedback : check_res) {
             max_time_needed =
                 std::max(max_time_needed, static_cast<int>(feedback.time_ms));
@@ -59,19 +85,21 @@ public:
                 status = feedback.execution_status;
                 break;
             }
+            last_test++;
         }
 
         result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
             "INSERT INTO most_db.solutions(task_id, language, code, "
-            "time_limit, verdict) "
-            "VALUES($1, $2, $3, $4, $5)",
+            "time_limit, verdict, last_test) "
+            "VALUES($1, $2, $3, $4, $5, $6)",
             task_id, language, solution, max_time_needed,
-            std::to_string(static_cast<int>(status))
+            execution_status_to_string(status), last_test
         );
 
         std::string json_out =
-            "{ \"verdict\":" + std::to_string(static_cast<int>(status)) +
+            "{ \"verdict\": \"" + execution_status_to_string(status) + "\",\n" +
+            "\"last_test\": " + std::to_string(last_test) +
             ",\n \"max_time_needed\":" + std::to_string(max_time_needed) + "}";
         return userver::formats::json::FromString(json_out);
     }
