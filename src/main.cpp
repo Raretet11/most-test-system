@@ -26,6 +26,5 @@ int main(int argc, char *argv[]) {
     most::append_solution_api_handler_submit_solution_component(component_list);
     most::append_task_api_handler_get_all_tasks_component(component_list);
     most::append_task_api_handler_get_task_by_id_component(component_list);
-
     return userver::utils::DaemonMain(argc, argv, component_list);
 }

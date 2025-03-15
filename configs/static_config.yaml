@@ -59,6 +59,10 @@ components_manager:
             path: /api/tasks/load
             method: POST
             task_processor: main-task-processor
+        handler-unload-all-solutions:
+            path: /v1/all_solutions
+            method: GET               
+            task_processor: main-task-processor  
 
         handler-api-get-all-tasks:
             path: /api/tasks/get-all
