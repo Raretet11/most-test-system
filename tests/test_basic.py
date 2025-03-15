@@ -11,6 +11,7 @@ async def test_load_task(service_client):
     data = {
         "name": "Sum",
         "tests": "1 2#3|3 4#7|5 -1#4",
+        "legend": "Sum of two numbers",
         "time_limit": 1000,
         "memory_limit": 1024,
     }
@@ -26,6 +27,7 @@ async def test_load_task_and_send_ok_solution(service_client):
     data = {
         "name": "Sum",
         "tests": "1 2#3|3 4#7|5 -1#4",
+        "legend": "Sum of two numbers",
         "time_limit": 1000,
         "memory_limit": 1024,
     }
@@ -52,6 +54,7 @@ async def test_load_task_and_send_wa_solution(service_client):
     data = {
         "name": "Sum",
         "tests": "1 2#3|3 4#7|5 -1#4",
+        "legend": "Sum of two numbers",
         "time_limit": 1000,
         "memory_limit": 1024,
     }
