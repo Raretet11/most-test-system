@@ -63,7 +63,7 @@ public:
         const auto &language = json["language"].As<std::string>();
         const auto &solution = json["solution"].As<std::string>();
 
-        auto p = checker::PythonChecker();
+        auto python_checker = checker::PythonChecker();
 
         auto result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
@@ -72,7 +72,7 @@ public:
 
         auto tests = result.AsSingleRow<std::string>();
         auto inputData = checker::decode_tests(tests);
-        auto check_res = p.check_solution(solution, inputData);
+        auto check_res = python_checker.check_solution(solution, inputData);
 
         std::string res;
         checker::ExecutionStatus status = checker::ExecutionStatus::kOK;
