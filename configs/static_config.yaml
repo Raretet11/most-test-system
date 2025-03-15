@@ -59,6 +59,10 @@ components_manager:
             path: /v1/load
             method: POST
             task_processor: main-task-processor
+        handler-unload-all-solutions:
+            path: /v1/all_solutions
+            method: GET               
+            task_processor: main-task-processor  
 
         postgres-db-1:
             dbconnection: $dbconnection

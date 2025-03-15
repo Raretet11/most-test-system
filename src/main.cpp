@@ -9,6 +9,7 @@
 #include <userver/utils/daemon_run.hpp>
 #include "admin_component/load_task.hpp"
 #include "user_component/submit_solution.hpp"
+#include "admin_component/unload_all_solution.hpp"
 
 int main(int argc, char *argv[]) {
     auto component_list =
@@ -22,6 +23,7 @@ int main(int argc, char *argv[]) {
 
     most::append_task_loader_component(component_list);
     most::append_task_submiter_component(component_list);
+    most::UnloadAllSolutionsComponent(component_list);
 
     return userver::utils::DaemonMain(argc, argv, component_list);
 }

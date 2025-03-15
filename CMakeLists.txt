@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12...3.31)
+cmake_minimum_required(VERSION 3.25...3.31)
 project(my_database CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -22,6 +22,7 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/user_component/submit_solution.cpp
     src/user_component/test_decoder.cpp
     src/admin_component/load_task.cpp
+    src/admin_component/unload_all_solution.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 
