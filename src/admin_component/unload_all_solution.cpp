@@ -16,11 +16,11 @@ using userver::formats::json::ValueBuilder;
 using userver::server::handlers::HttpHandlerBase;
 using userver::storages::postgres::ClusterHostType;
 
-class GetAllSolutionsHandler final : public HttpHandlerBase {
+class UnloadAllSolution final : public HttpHandlerBase {
  public:
-  static constexpr std::string_view kName = "handler-get-all-solutions";
+  static constexpr std::string_view kName = "handler-unload-all-solutions";
 
-  GetAllSolutionsHandler(const userver::components::ComponentConfig& config,
+  UnloadAllSolution(const userver::components::ComponentConfig& config,
                         const userver::components::ComponentContext& context)
       : HttpHandlerBase(config, context),
         pg_cluster_(
@@ -31,15 +31,20 @@ class GetAllSolutionsHandler final : public HttpHandlerBase {
       const userver::server::http::HttpRequest& request,
       userver::server::request::RequestContext&) const override {
     
-    // Получаем все решения с полной информацией
+    // Создаем таблицу со всей инфой
     auto result = pg_cluster_->Execute(
         ClusterHostType::kMaster,
-        "SELECT s.id, s.task_id, t.name as task_name, s.language, "
-        "s.code, s.verdict "
-        "FROM most_db.solutions s "
-        "JOIN most_db.tasks t ON s.task_id = t.id");
+"SELECT most_db.solutions.id, "
+    "most_db.solutions.task_id, "
+    "most_db.tasks.name as task_name, "
+    "most_db.solutions.language, "
+    "most_db.solutions.code, "
+    "most_db.solutions.verdict "
+    "FROM most_db.solutions "
+    "JOIN most_db.tasks "
+    "ON most_db.solutions.task_id = most_db.tasks.id");
 
-    // Строим JSON-ответ
+    // Строим JSON ответ
     ValueBuilder json;
     for (const auto& row : result) {
       ValueBuilder solution;
@@ -62,9 +67,9 @@ class GetAllSolutionsHandler final : public HttpHandlerBase {
 
 }  // namespace
 
-void AppendGetAllSolutionsComponent(
+void UnloadAllSolutionsComponent(
     userver::components::ComponentList& component_list) {
-  component_list.Append<GetAllSolutionsHandler>();
+  component_list.Append<UnloadAllSolution>();
 }
 
 }  // namespace most

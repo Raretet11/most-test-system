@@ -4,7 +4,7 @@
 
 namespace most {
 
-void AppendGetAllSolutionsComponent(
+void UnloadAllSolutionsComponent(
     userver::components::ComponentList& component_list);
 
 }  // namespace most
