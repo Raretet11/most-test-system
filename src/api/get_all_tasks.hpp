@@ -4,7 +4,7 @@
 
 namespace most {
 
-void append_task_loader_component(
+void append_task_api_handler_get_all_tasks_component(
     userver::components::ComponentList &component_list
 );
 

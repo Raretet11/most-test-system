@@ -60,7 +60,7 @@ void PythonChecker::generate_files(const std::string &code) const {
         std::filesystem::permissions(
             file_name,
             std::filesystem::perms::owner_all |
-                std::filesystem::perms::group_all | 
+                std::filesystem::perms::group_all |
                 std::filesystem::perms::others_all,
             std::filesystem::perm_options::add
         );

@@ -19,10 +19,12 @@ userver_setup_environment()
 # Common sources
 add_library(${PROJECT_NAME}_objs OBJECT
     src/checker/python_checker.cpp
-    src/user_component/submit_solution.cpp
-    src/user_component/test_decoder.cpp
-    src/admin_component/load_task.cpp
-    src/admin_component/unload_all_solution.cpp
+    src/checker_components/test_decoder.cpp
+    src/api/submit_solution.cpp
+    src/api/load_task.cpp
+    src/api/get_all_tasks.cpp
+    src/api/get_task_by_id.cpp
+    src/api/get_all_solutions.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 

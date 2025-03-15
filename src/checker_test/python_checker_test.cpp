@@ -40,6 +40,8 @@ UTEST(PythonSolutionChecker, BasicWrongAnswerSolution) {
     };
 
     for (const auto &feedback : checker.check_solution(solution, problems)) {
-        EXPECT_EQ(feedback.execution_status, checker::ExecutionStatus::kWrongAnswer);
+        EXPECT_EQ(
+            feedback.execution_status, checker::ExecutionStatus::kWrongAnswer
+        );
     }
 }
