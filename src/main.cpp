@@ -22,8 +22,8 @@ int main(int argc, char *argv[]) {
             .Append<userver::components::Postgres>("postgres-db-1")
             .Append<userver::clients::dns::Component>();
 
-    most::append_task_loader_component(component_list);
-    most::append_task_submiter_component(component_list);
+    most::append_task_api_handler_load_tasks_component(component_list);
+    most::append_solution_api_handler_submit_solution_component(component_list);
     most::append_task_api_handler_get_all_tasks_component(component_list);
     most::append_task_api_handler_get_task_by_id_component(component_list);
 

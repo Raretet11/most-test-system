@@ -4,7 +4,7 @@
 
 namespace most {
 
-void append_task_submiter_component(
+void append_solution_api_handler_submit_solution_component(
     userver::components::ComponentList &component_list
 );
 

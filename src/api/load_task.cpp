@@ -55,7 +55,7 @@ public:
 
 }  // namespace
 
-void append_task_loader_component(
+void append_task_api_handler_load_tasks_component(
     userver::components::ComponentList &component_list
 ) {
     component_list.Append<ApiHandler>();
