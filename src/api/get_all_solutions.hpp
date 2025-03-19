@@ -5,6 +5,7 @@
 namespace most {
 
 void append_solution_api_handler_get_all_solutions_component(
-    userver::components::ComponentList& component_list);
+    userver::components::ComponentList &component_list
+);
 
 }  // namespace most

@@ -1,5 +1,6 @@
 #include "load_task.hpp"
 #include <fmt/format.h>
+#include <cstdint>
 #include <string>
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>

@@ -1,5 +1,6 @@
 #include "get_task_by_id.hpp"
 #include <fmt/format.h>
+#include <cstdint>
 #include <string>
 #include <tuple>
 #include <userver/clients/dns/component.hpp>

@@ -11,7 +11,7 @@
 
 > "$5"
 
-TIME_LIMIT_SEC=$(bc<<<"scale=3;$2/1000")
+TIME_LIMIT_SEC=$(echo "scale=5; $2 / 1000" | bc)
 
 MEMORY_LIMIT_KB=$3
 
