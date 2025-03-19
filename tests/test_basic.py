@@ -214,9 +214,6 @@ async def test_load_task_and_send_two_solutions_at_time(service_client):
 
 
 async def test_load_task_and_send_many_time_limit_solution(service_client):
-    """
-    Тестирующая система должна убивать решения, которые выполняются слишком долго
-    """
     data = {
         "name": "Sum",
         "tests": "1 2#3|3 4#7|5 -1#4",
