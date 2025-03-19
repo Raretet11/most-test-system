@@ -187,13 +187,15 @@ async def test_load_task_and_send_two_solutions_at_time(service_client):
     data_ok = {
         "task_id": 1,
         "language": "python",
-        "solution": "from time import sleep\nsleep(0.5)\na, b = map(int, input().split())\nprint(a + b)",
+        "solution": "from time import sleep\nsleep(0.5)\na, b = \
+            map(int, input().split())\nprint(a + b)",
     }
 
     data_wa = {
         "task_id": 1,
         "language": "python",
-        "solution": "from time import sleep\nsleep(0.5)\na, b = map(int, input().split())\nprint(a + b + 1)",
+        "solution": "from time import sleep\nsleep(0.5)\na, b = \
+        map(int, input().split())\nprint(a + b + 1)",
     }
 
     response_ok = await service_client.post(
@@ -209,3 +211,35 @@ async def test_load_task_and_send_two_solutions_at_time(service_client):
     response_json_wa = response_wa.json()
     assert response_json_wa["verdict"] == "Wrong answer!"
     assert response_wa.status == 200
+
+
+async def test_load_task_and_send_many_time_limit_solution(service_client):
+    """
+    Тестирующая система должна убивать решения, которые выполняются слишком долго
+    """
+    data = {
+        "name": "Sum",
+        "tests": "1 2#3|3 4#7|5 -1#4",
+        "legend": "Sum of two numbers",
+        "time_limit": 1000,
+        "memory_limit": 1024,
+    }
+    headers = {"Content-Type": "application/json"}
+
+    response = await service_client.post(
+        "/api/tasks/load", data=json.dumps(data), headers=headers
+    )
+    assert response.status == 200
+
+    data = {
+        "task_id": 1,
+        "language": "python",
+        "solution": "from time import sleep\nsleep(5)",
+    }
+
+    response = await service_client.post(
+        "/api/solutions/submit", data=json.dumps(data), headers=headers
+    )
+    response_json = response.json()
+    assert response_json["verdict"] == "Time Limit exceeded"
+    assert response.status == 200
