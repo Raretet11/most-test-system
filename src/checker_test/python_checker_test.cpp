@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include <userver/utest/utest.hpp>
 #include <vector>
-#include "checker_components/execution_status.hpp"
+#include "components/execution_status.hpp"
 
 UTEST(PythonSolutionChecker, BasicOkSolution) {
     auto checker = checker::PythonChecker();

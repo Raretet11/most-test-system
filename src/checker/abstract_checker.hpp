@@ -2,8 +2,8 @@
 
 #include <string>
 #include <vector>
-#include "checker_components/problem.hpp"
-#include "checker_components/submission_feedback.hpp"
+#include "components/problem.hpp"
+#include "components/submission_feedback.hpp"
 
 namespace checker {
 

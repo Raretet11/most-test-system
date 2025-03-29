@@ -9,8 +9,8 @@
 #include <userver/storages/postgres/component.hpp>
 #include <userver/utils/assert.hpp>
 #include "checker/python_checker.hpp"
-#include "checker_components/execution_status.hpp"
-#include "checker_components/test_decoder.hpp"
+#include "components/execution_status.hpp"
+#include "components/test_decoder.hpp"
 
 namespace most {
 

@@ -8,8 +8,8 @@
 #include <userver/engine/subprocess/environment_variables.hpp>
 #include <userver/engine/subprocess/process_starter.hpp>
 #include <vector>
-#include "checker_components/execution_status.hpp"
-#include "checker_components/submission_feedback.hpp"
+#include "components/execution_status.hpp"
+#include "components/submission_feedback.hpp"
 #include "userver/engine/subprocess/child_process.hpp"
 #include "userver/engine/subprocess/environment_variables.hpp"
 #include "userver/engine/task/current_task.hpp"

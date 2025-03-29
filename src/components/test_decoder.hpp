@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include "checker_components/problem.hpp"
+#include "components/problem.hpp"
 
 namespace checker {
 

@@ -20,3 +20,10 @@ CREATE TABLE IF NOT EXISTS most_db.solutions (
     verdict TEXT,
     last_test INTEGER
 );
+
+CREATE TABLE IF NOT EXISTS most_db.users (
+    id PRIMARY KEY,
+    username TEXT NOT NULL,
+    email TEXT NOT NULL,
+    password_hash TEXT NOT NULL,
+);
