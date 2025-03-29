@@ -36,15 +36,15 @@ std::string PythonChecker::get_checker_name() const {
 };
 
 std::string PythonChecker::get_code_file_name() const {
-    return "script.py";
+    return std::to_string(_checker_index) + "script.py";
 };
 
 std::string PythonChecker::get_output_file_name() const {
-    return "output.txt";
+    return std::to_string(_checker_index) + "output.txt";
 };
 
 std::string PythonChecker::get_error_file_name() const {
-    return "errors.txt";
+    return std::to_string(_checker_index) + "errors.txt";
 };
 
 void PythonChecker::generate_files(const std::string &code) const {
@@ -67,6 +67,23 @@ void PythonChecker::generate_files(const std::string &code) const {
     }
 };
 
+void PythonChecker::delete_files() const {
+    std::vector<std::string> files_to_delete = {
+        get_code_file_name(), get_error_file_name(), get_output_file_name()};
+
+    for (const auto &filename : files_to_delete) {
+        try {
+            std::filesystem::remove(filename);
+        } catch (...) {
+        }
+    }
+}
+
+PythonChecker::PythonChecker() {
+    _checker_index = PythonChecker::_global_checker_index;
+    PythonChecker::_global_checker_index++;
+}
+
 std::vector<SubmissionFeedback> PythonChecker::check_solution(
     const std::string &code,
     const std::vector<Problem> &problems
@@ -78,6 +95,7 @@ std::vector<SubmissionFeedback> PythonChecker::check_solution(
         testing_result.push_back(check_test(problem));
     }
 
+    delete_files();
     return testing_result;
 };
 

@@ -1,4 +1,5 @@
 #include "test_decoder.hpp"
+#include <cstdint>
 
 namespace checker {
 
@@ -20,14 +21,18 @@ std::vector<std::string> split(std::string s, const std::string &delimiter) {
 
 }  // namespace
 
-std::vector<Problem> decode_tests(const std::string &test) {
+std::vector<Problem> build_problem_set(
+    const std::string &test,
+    std::uint32_t time_limit,
+    std::uint32_t memory_limit
+) {
     std::vector<Problem> res;
 
     auto splited_tests = split(test, "|");
 
     for (size_t i = 0; i < splited_tests.size(); i++) {
         auto cur = split(splited_tests[i], "#");
-        res.emplace_back(cur[0], cur[1]);
+        res.emplace_back(cur[0], cur[1], time_limit, memory_limit);
     }
     return res;
 }

@@ -14,7 +14,7 @@ struct Problem {
     Problem(
         const std::string &input_,
         const std::string &expected_output_,
-        std::uint32_t time_limit_ms_ = 100,
+        std::uint32_t time_limit_ms_ = 1000,
         std::uint32_t memory_limit_kb_ = 1024
     )
         : input(input_),

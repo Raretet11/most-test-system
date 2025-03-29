@@ -1,5 +1,6 @@
 #include "submit_solution.hpp"
 #include <fmt/format.h>
+#include <cstdint>
 #include <string>
 #include <userver/clients/dns/component.hpp>
 #include <userver/components/component.hpp>
@@ -67,20 +68,30 @@ public:
 
         auto result = pg_cluster_->Execute(
             userver::storages::postgres::ClusterHostType::kMaster,
-            "SELECT tests FROM most_db.tasks WHERE id = ($1);", task_id
+            "SELECT tests, time_limit, memory_limit FROM most_db.tasks WHERE "
+            "id = ($1);",
+            task_id
         );
 
-        auto tests = result.AsSingleRow<std::string>();
-        auto inputData = checker::decode_tests(tests);
-        auto check_res = python_checker.check_solution(solution, inputData);
+        const auto task = result.AsSingleRow<std::tuple<std::string, int, int>>(
+            userver::storages::postgres::kRowTag
+        );
+
+        auto tests = std::get<0>(task);
+        std::uint32_t time_limit =
+            static_cast<std::uint32_t>(std::get<1>(task));
+        std::uint32_t memory_limit =
+            static_cast<std::uint32_t>(std::get<2>(task));
+        auto problems =
+            checker::build_problem_set(tests, time_limit, memory_limit);
+        auto check_res = python_checker.check_solution(solution, problems);
 
         std::string res;
         checker::ExecutionStatus status = checker::ExecutionStatus::kOK;
-        int max_time_needed = 0;
-        int last_test = 0;
+        std::uint32_t max_time_needed = 0;
+        std::uint32_t last_test = 0;
         for (const auto &feedback : check_res) {
-            max_time_needed =
-                std::max(max_time_needed, static_cast<int>(feedback.time_ms));
+            max_time_needed = std::max(max_time_needed, feedback.time_ms);
             if (feedback.execution_status != checker::ExecutionStatus::kOK) {
                 status = feedback.execution_status;
                 break;
@@ -93,8 +104,8 @@ public:
             "INSERT INTO most_db.solutions(task_id, language, code, "
             "time_limit, verdict, last_test) "
             "VALUES($1, $2, $3, $4, $5, $6)",
-            task_id, language, solution, max_time_needed,
-            execution_status_to_string(status), last_test
+            task_id, language, solution, static_cast<int>(max_time_needed),
+            execution_status_to_string(status), static_cast<int>(last_test)
         );
 
         std::string json_out =

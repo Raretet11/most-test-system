@@ -22,7 +22,7 @@ struct SubmissionFeedback {
         : execution_status(result_),
           time_ms(time_ms_),
           memory_kb(memory_kb_),
-          output(output_) {};
+          output(output_){};
 };
 
 }  // namespace checker
