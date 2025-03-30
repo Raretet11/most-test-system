@@ -19,3 +19,4 @@ Makefile
 test.sh
 .devcontainer/devcontainer.json
 cmake
+FRONTEND/node_modules
