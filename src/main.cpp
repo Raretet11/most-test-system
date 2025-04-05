@@ -10,6 +10,7 @@
 #include "api/get_all_solutions.hpp"
 #include "api/get_all_tasks.hpp"
 #include "api/get_task_by_id.hpp"
+#include "api/get_tasks.hpp"
 #include "api/load_task.hpp"
 #include "api/submit_solution.hpp"
 
@@ -29,6 +30,7 @@ int main(int argc, char *argv[]) {
     most::append_task_api_handler_get_task_by_id_component(component_list);
     most::append_solution_api_handler_get_all_solutions_component(component_list
     );
+    most::append_task_api_handler_get_tasks_component(component_list);
 
     return userver::utils::DaemonMain(argc, argv, component_list);
 }
