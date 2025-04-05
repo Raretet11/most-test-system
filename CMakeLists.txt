@@ -25,6 +25,7 @@ add_library(${PROJECT_NAME}_objs OBJECT
     src/api/get_all_tasks.cpp
     src/api/get_task_by_id.cpp
     src/api/get_all_solutions.cpp
+    src/api/get_tasks.cpp
 )
 target_link_libraries(${PROJECT_NAME}_objs PUBLIC userver::postgresql)
 
