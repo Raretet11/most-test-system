@@ -49,7 +49,8 @@ std::string PythonChecker::get_error_file_name() const {
 
 void PythonChecker::generate_files(const std::string &code) const {
     std::vector<std::string> files_to_generate = {
-        get_code_file_name(), get_error_file_name(), get_output_file_name()};
+        get_code_file_name(), get_error_file_name(), get_output_file_name()
+    };
     for (const auto &file_name : files_to_generate) {
         std::ofstream file(file_name);
         if (file_name == get_code_file_name()) {
@@ -69,7 +70,8 @@ void PythonChecker::generate_files(const std::string &code) const {
 
 void PythonChecker::delete_files() const {
     std::vector<std::string> files_to_delete = {
-        get_code_file_name(), get_error_file_name(), get_output_file_name()};
+        get_code_file_name(), get_error_file_name(), get_output_file_name()
+    };
 
     for (const auto &filename : files_to_delete) {
         try {
@@ -106,19 +108,20 @@ SubmissionFeedback PythonChecker::check_test(const Problem &problem) const {
         std::to_string(problem.memory_limit_kb),
         get_error_file_name(),
         get_output_file_name(),
-        problem.input};
+        problem.input
+    };
 
     auto process = userver::engine::subprocess::ProcessStarter(
         userver::engine::current_task::GetTaskProcessor()
     );
-    auto enviroment = userver::engine::subprocess::EnvironmentVariables({});
+    auto options = userver::engine::subprocess::ExecOptions();
+    options.env = userver::engine::subprocess::EnvironmentVariables({});
+    options.stderr_file = get_error_file_name();
+    options.stdout_file = get_output_file_name();
 
-    auto info = process
-                    .Exec(
-                        get_checker_name(), process_args, enviroment,
-                        get_output_file_name(), get_error_file_name()
-                    )
-                    .Get();
+    auto info =
+        process.Exec(get_checker_name(), process_args, std::move(options))
+            .Get();
 
     long execution_time_ms = info.GetExecutionTime().count();
     int return_code = info.GetExitCode();
