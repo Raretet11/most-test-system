@@ -59,3 +59,11 @@ file(GLOB CONFIGS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/configs/*.yaml ${CMAKE_CURRE
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT ${PROJECT_NAME})
 install(FILES ${CONFIGS_FILES} DESTINATION ${CMAKE_INSTALL_SYSCONFDIR}/${PROJECT_NAME} COMPONENT ${PROJECT_NAME})
+
+install(CODE "sudo apt-get update\n
+sudo apt-get install libcap-dev asciidoc-base\n
+git clone https://github.com/ioi/isolate.git\n
+cd isolate\n
+make\n
+sudo make install\n
+")

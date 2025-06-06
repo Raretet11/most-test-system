@@ -111,41 +111,12 @@ async def test_load_task_and_send_compilation_error_solution(service_client):
     assert response.status == 200
 
 
-async def test_load_task_and_send_compilation_error_solution(service_client):
-    data = {
-        "name": "Sum",
-        "tests": "1 2#3|3 4#7|5 -1#4",
-        "legend": "Sum of two numbers",
-        "time_limit": 1000,
-        "memory_limit": 1024,
-    }
-    headers = {"Content-Type": "application/json"}
-
-    response = await service_client.post(
-        "/api/tasks/load", data=json.dumps(data), headers=headers
-    )
-    assert response.status == 200
-
-    data = {
-        "task_id": 1,
-        "language": "python",
-        "solution": "print(",
-    }
-
-    response = await service_client.post(
-        "/api/solutions/submit", data=json.dumps(data), headers=headers
-    )
-    response_json = response.json()
-    assert response_json["verdict"] == "Compilation Error"
-    assert response.status == 200
-
-
 async def test_load_task_and_send_time_limit_solution(service_client):
     data = {
         "name": "Sum",
         "tests": "1 2#3|3 4#7|5 -1#4",
         "legend": "Sum of two numbers",
-        "time_limit": 1000,
+        "time_limit": 10,
         "memory_limit": 1024,
     }
     headers = {"Content-Type": "application/json"}
@@ -158,7 +129,7 @@ async def test_load_task_and_send_time_limit_solution(service_client):
     data = {
         "task_id": 1,
         "language": "python",
-        "solution": "from time import sleep\nsleep(1)",
+        "solution": "from time import sleep\nsleep(3)",
     }
 
     response = await service_client.post(
@@ -218,7 +189,7 @@ async def test_load_task_and_send_many_time_limit_solution(service_client):
         "name": "Sum",
         "tests": "1 2#3|3 4#7|5 -1#4",
         "legend": "Sum of two numbers",
-        "time_limit": 1000,
+        "time_limit": 10,
         "memory_limit": 1024,
     }
     headers = {"Content-Type": "application/json"}
