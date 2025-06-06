@@ -41,7 +41,7 @@ jobs:
           - name: Install Isolate
             run: |
                 sudo apt-get update
-                sudo apt-get install libcap-dev asciidoc-base systemd
+                sudo apt-get install libcap-dev asciidoc-base libsystemd-dev
                 git clone https://github.com/ioi/isolate.git
                 cd isolate
                 make
