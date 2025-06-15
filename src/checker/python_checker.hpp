@@ -1,6 +1,7 @@
 #pragma once
 
 #include "abstract_checker.hpp"
+#include "checker_components/problem.hpp"
 #include "checker_components/submission_feedback.hpp"
 
 namespace checker {
@@ -22,9 +23,13 @@ private:
     std::string get_checker_name() const;
     std::string get_output_file_name() const;
     std::string get_error_file_name() const;
+    std::string get_meta_file_name() const;
+    std::string get_test_file_name() const;
 
+    void generate_test(const Problem &problem) const;
     void generate_files(const std::string &solution) const;
     void delete_files() const;
+    void delete_test() const;
     SubmissionFeedback check_test(const Problem &problem) const override;
 };
 

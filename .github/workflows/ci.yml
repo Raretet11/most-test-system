@@ -38,6 +38,16 @@ jobs:
                     ${{matrix.os}} ${{matrix.info}} ccache-dir ${{github.ref}} run-'
                     ${{matrix.os}} ${{matrix.info}} ccache-
 
+          - name: Install Isolate
+            run: |
+                sudo apt-get update
+                sudo apt-get install libcap-dev asciidoc-base libsystemd-dev
+                git clone https://github.com/ioi/isolate.git
+                cd isolate
+                make
+                sudo make install
+                cd ..
+
           - name: Install packages
             run: |
                 DEPS_FILE="https://raw.githubusercontent.com/userver-framework/userver/refs/heads/develop/scripts/docs/en/deps/${{matrix.os}}.md"
