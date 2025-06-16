@@ -1,4 +1,11 @@
 [![CI](https://github.com/Raretet11/most-test-system/actions/workflows/ci.yml/badge.svg)](https://github.com/Raretet11/most-test-system/actions/workflows/ci.yml)
+
+<div align="center">
+	<code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/vue_js.png" alt="Vue.js" title="Vue.js"/></code>
+	<code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/c++.png" alt="C++" title="C++"/></code>
+	<code><img width="50" src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/postgresql.png" alt="PostgreSQL" title="PostgreSQL"/></code>
+</div>
+
 # most - mvp
 
 **most-test sys.** — это архив задач с встроенной тестирующей системой, предназначенной для проверки решений пользователей, для проверки задач используется Isolate - система для проверки задач используемая на международной олимпиаде по информатике (IOI), для хранения данных используется база данных Postgres. Сервис представлен бекенд и фронтенд составляющими, для взаимодействия между фронтендом и бекендом используется REST API, подробнее о нем ниже. Бекенд написан на C++ с ипользованием фреймворвка Userver, фронтенд написан на Vue.js
